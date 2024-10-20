@@ -4,6 +4,8 @@ import Nat "mo:base/Nat";
 
 module {
     public type Auction = {
+        id : Nat;
+        creator : Principal;
         image : Text;
         address : Text;
         province : Text;
@@ -18,6 +20,7 @@ module {
     };
 
     public type Participant = {
+        id : Nat;
         user : Principal;
         amount : Nat;
         auctionId : Nat;
