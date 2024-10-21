@@ -12,7 +12,10 @@ module {
         city : Text;
         postalCode : Nat;
         propertyType : Text;
+        houseArea : Nat;
+        yearBuilt : Nat;
         description : Text;
+        startPrice : Nat;
         startAuction : Nat;
         endAuction : Nat;
         certificateNumber : Nat;
@@ -25,4 +28,12 @@ module {
         amount : Nat;
         auctionId : Nat;
     };
+
+    public type FinalBid = {
+        id : Nat;
+        user : Principal;
+        finalPrice : Nat;
+        auctionId : Nat;
+    };
+
 };
