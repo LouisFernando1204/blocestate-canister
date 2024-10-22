@@ -3,7 +3,7 @@ import Principal "mo:base/Principal";
 import Error "mo:base/Error";
 import Actor "../src/canister_backend/main";
 
-let alice = Principal.fromText("ihmrf-7yaaa");
+let alice = Principal.fromText("tw6hs-sxyaa");
 let bob = Principal.fromText("wo5qg-ysjiq-5da");
 
 await test(
@@ -77,7 +77,8 @@ await test(
             123456,
             "Certificate",
         );
-        await instance.bidAuction(0, 45);
+
+        await instance.bidAuction(1, 45);
         let participants = await instance.getAuctionParticipants("123 Main St");
         assert (participants.size() == 1);
     },
@@ -103,8 +104,8 @@ await test(
             123456,
             "Certificate",
         );
-        await instance.bidAuction(0, 45);
-        await instance.bidAuction(0, 50);
+        await instance.bidAuction(1, 45);
+        await instance.bidAuction(1, 50);
         let participants = await instance.getAllParticipants();
         assert (participants.size() == 2);
     },
@@ -140,8 +141,8 @@ await test(
             123456,
             "Certificate",
         );
-        await instance.bidAuction(0, 45);
-        await instance.decideFinalBid(alice, "123 Main St", 70, 0);
+        await instance.bidAuction(1, 45);
+        await instance.decideFinalBid(bob, "123 Main St", 70, 1);
         let finalBids = await instance.getFinalBids();
         assert (finalBids.size() == 1);
         assert (finalBids[0].finalPrice == 70);
@@ -180,7 +181,8 @@ await test(
     func() : async () {
         let instance = await Actor.Main();
         try {
-            await instance.checkParticipantVerification();
+            let hash = await instance.checkParticipantVerification();
+            assert (hash != "");
         } catch (error) {
             assert (Error.message(error) == "Verification hash not found!");
         };
@@ -209,13 +211,13 @@ await test(
         );
 
         try {
-            await instance.bidAuction(0, 40);
+            await instance.bidAuction(1, 40);
         } catch (error) {
             assert (Error.message(error) == "Bid amount must be greater than the starting price!");
         };
 
         try {
-            await instance.bidAuction(0, 30);
+            await instance.bidAuction(1, 30);
         } catch (error) {
             assert (Error.message(error) == "Bid amount must be greater than the starting price!");
         };
@@ -257,14 +259,15 @@ await test(
             100,
             2020,
             "Description",
-            1000,
-            10,
+            40,
+            20,
+            25,
             123456,
             "Certificate",
         );
-        await instance.bidAuction(0, 45);
+        await instance.bidAuction(1, 45);
         try {
-            await instance.decideFinalBid(alice, "123 Main St", 0, 0);
+            await instance.decideFinalBid(bob, "123 Main St", 0, 1);
         } catch (error) {
             assert (Error.message(error) == "Invalid final bid input!");
         };
@@ -275,8 +278,25 @@ await test(
     "throw error on participant not found during final bid",
     func() : async () {
         let instance = await Actor.Main();
+        await instance.createAuction(
+            "https://example.com/image.png",
+            "123 Main St",
+            "Province",
+            "City",
+            12345,
+            "Property Type",
+            100,
+            2020,
+            "Description",
+            40,
+            20,
+            25,
+            123456,
+            "Certificate",
+        );
+        await instance.bidAuction(1, 45);
         try {
-            await instance.decideFinalBid(bob, "123 Main St", 50, 0);
+            await instance.decideFinalBid(alice, "123 Main St", 50, 1);
         } catch (error) {
             assert (Error.message(error) == "Participant not found!");
         };

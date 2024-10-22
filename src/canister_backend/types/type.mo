@@ -35,5 +35,4 @@ module {
         finalPrice : Nat;
         auctionId : Nat;
     };
-
 };

@@ -7,7 +7,7 @@ import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Type "types/type";
 
-actor AuctionActor {
+actor class Main() {
 
   private type Auction = Type.Auction;
   private type Participant = Type.Participant;
@@ -80,7 +80,7 @@ actor AuctionActor {
 
   private func createAuctionInput(creator : Principal, image : Text, address : Text, province : Text, city : Text, postalCode : Nat, propertyType : Text, houseArea : Nat, yearBuilt : Nat, description : Text, startPrice : Nat, startAuction : Nat, endAuction : Nat, certificateNumber : Nat, certificate : Text) : async () {
     let auction : Auction = {
-      id = auctions.size();
+      id = auctions.size() + 1;
       creator = creator;
       image = image;
       address = address;
@@ -130,7 +130,7 @@ actor AuctionActor {
 
   private func createParticipant(caller : Principal, auctionId : Nat, bidAmount : Nat) : async (Participant) {
     let participant : Participant = {
-      id = participants.size();
+      id = participants.size() + 1;
       user = caller;
       amount = bidAmount;
       auctionId = auctionId;
@@ -177,7 +177,7 @@ actor AuctionActor {
 
   private func createFinalBids(participant : Principal, finalPrice : Nat, auctionId : Nat) : async () {
     let finalBid : FinalBid = {
-      id = finalBids.size();
+      id = finalBids.size() + 1;
       user = participant;
       finalPrice = finalPrice;
       auctionId = auctionId;
