@@ -7,7 +7,7 @@ import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Type "types/type";
 
-actor class Main() {
+actor {
 
   private type Auction = Type.Auction;
   private type Participant = Type.Participant;
